@@ -1,0 +1,43 @@
+<style>
+    button {
+            border: 1px solid #666;
+            background: rgb(87, 111, 87);
+            width: 100%;
+            border-radius: 5px;
+            padding: 10px;
+            color: aliceblue;
+            margin-top: 5px;
+        }
+        
+        body {
+            user-select: none;
+
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        * {
+            cursor: pointer;
+        }
+</style>
+
+<button onclick="localStorage.clear()">localStorage.clear()</button>
+<br>
+<button onclick="localStorage.setItem('MINHAS_MOEDAS',parseInt(localStorage.getItem('MINHAS_MOEDAS'))+1)">MINHAS_MOEDAS++</button>
+<br>
+<button onclick="localStorage.setItem('A_RECEBER',parseInt(localStorage.getItem('A_RECEBER'))+1)">A_RECEBER++</button>
+<br>
+<button onclick="localStorage.setItem('BARRA5',parseInt(localStorage.getItem('BARRA5'))+1)">BARRA5++</button>
+<br>
+<button onclick="window.location.href='index.html'">Voltar</button>
+<br>
+
+
+
+
+
+
+
+
+

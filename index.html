@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCoin - Dashboard</title>
+    <style>
+        body {
+            user-select: none;
+
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        * {
+            cursor: pointer;
+        }
+
+        canvas {
+            background-color: #333;
+            width: 100%;
+        }
+
+        table {
+            background-color: #333;
+            width: 100%;
+            border: 1px solid #666;
+            border-radius: 5px;
+            padding: 2%;
+        }
+
+        tr {
+            border: 1px solid #666;
+        }
+
+        p {
+            font-size: smaller;
+        }
+
+        div {
+            border: 1px solid #666;
+            width: 90%;
+            border-radius: 15px;
+            margin-left: 2%;
+            padding: 3%;
+            margin-top: 15px;
+
+        }
+
+        button {
+            border: 1px solid #666;
+            background: rgb(87, 111, 87);
+            width: 100%;
+            border-radius: 5px;
+            padding: 10px;
+            color: aliceblue;
+            margin-top: 5px;
+        }
+
+        .btComprar {
+            border: 1px solid #666;
+            background: rgb(85, 146, 85);
+
+            border-radius: 5px;
+            padding: 10px;
+            color: aliceblue;
+            margin-right: 2%;
+            float: right;
+            font-size: 10px;
+        }
+
+        font {
+            font-size: small;
+        }
+    </style>
+    <script src="chart.js"></script>
+</head>
+
+<body>
+    <center><h4>BCoin</h4></center>
+
+    <div>
+
+
+
+
+        <table>
+
+            <tr>
+                <td>
+                    <font style="font-size: 13px;">Valor Atual:</font>
+
+                    <font style="font-size: 25px;" id="VALOR_MOEDA_ATUAL">R$ 100.00</font>
+                    <font id="VARIACAO">+4%</font>
+                </td>
+
+                <td>
+                    <font id="addMoedas" class="btComprar">addMoedas</font>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <hr>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <font id="MINHAS_MOEDAS">1</font>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <font id="CARTEIRA">R$ 100.00</font>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <font id="VALOR_QUANDO_COMPROU">jjjj</font>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <font id="A_RECEBER">jjjj</font>
+                </td>
+            </tr>
+        </table>
+
+
+
+        <canvas id="lineChart" height="200"></canvas>
+    </div>
+
+
+
+
+    <div>
+
+
+        <input type="checkbox" name="ATT_AUTOMATICO" id="ATT_AUTOMATICO">
+        <label for="ATT_AUTOMATICO">Atualizar Automaticamente</label>
+
+        <button id="venderMoedas">venderMoedas</button>
+
+
+    </div>
+
+    <br><br>
+    <hr id="Lorem">
+
+
+
+
+    <script>
+
+
+
+        const variacaoDeUmDiaProOutro = 10;
+
+
+
+        document.getElementById('addMoedas').addEventListener('click', () => {
+
+            if (VALOR_MOEDA_ATUAL <= A_RECEBER) {
+
+
+                localStorage.setItem('A_RECEBER', A_RECEBER - VALOR_MOEDA_ATUAL)
+
+
+
+                var c = parseInt(localStorage.getItem('MINHAS_MOEDAS')) + 1
+                localStorage.setItem('MINHAS_MOEDAS', c);
+
+                localStorage.setItem('VALOR_QUANDO_COMPROU', VALOR_MOEDA_ATUAL)
+                VALOR_QUANDO_COMPROU = parseInt(localStorage.getItem('VALOR_QUANDO_COMPROU'))
+
+                log('add moedas,atualmente com ' + MINHAS_MOEDAS + ' moedas, valor atual da moeda em R$ ' + VALOR_MOEDA_ATUAL + '.00, total de R$ ' + CARTEIRA + '.00')
+
+
+                window.location.reload()
+            }
+            else {
+                console.log('n tem dinheiro')
+            }
+
+        })
+
+        document.getElementById('venderMoedas').addEventListener('click', () => {
+
+            log('vendeu moedas,tinha ' + MINHAS_MOEDAS + ' moedas, valor atual da moeda em R$ ' + VALOR_MOEDA_ATUAL + '.00, total de R$ ' + CARTEIRA + '.00')
+            localStorage.setItem('MINHAS_MOEDAS', 0);
+            localStorage.setItem('A_RECEBER', parseInt(localStorage.getItem('A_RECEBER')) + CARTEIRA);
+
+            window.location.reload()
+
+        })
+
+        document.getElementById('ATT_AUTOMATICO').addEventListener('click', () => {
+            if (document.getElementById('ATT_AUTOMATICO').checked) {
+                localStorage.setItem('ATT_AUTOMATICO', 1);
+                window.location.reload()
+            }
+            else {
+                localStorage.setItem('ATT_AUTOMATICO', 0);
+                window.location.reload()
+            }
+        })
+
+        document.getElementById('Lorem').addEventListener('click', () => {
+            window.location.href = 'clear.html'
+        })
+
+
+
+
+
+
+        // Inicializa os valores no localStorage se não existirem
+        initializeLocalStorage('BARRA1', getRandomValue(25, 30));
+        initializeLocalStorage('BARRA2', getRandomValue(10, 20));
+        initializeLocalStorage('BARRA3', getRandomValue(10, 35));
+        initializeLocalStorage('BARRA4', getRandomValue(30, 45));
+        initializeLocalStorage('BARRA5', getRandomValue(60, 75));
+        initializeLocalStorage('VALOR_MOEDA_ATUAL', 10);
+        initializeLocalStorage('CARTEIRA', 0);
+        initializeLocalStorage('MINHAS_MOEDAS', 0);
+        initializeLocalStorage('DIA_DE_HOJE', getCurrentDay());
+        initializeLocalStorage('VARIACAO', 0);
+        initializeLocalStorage('ATT_AUTOMATICO', 0);
+        initializeLocalStorage('LOG', '');
+        initializeLocalStorage('VALOR_QUANDO_COMPROU', 0);
+        initializeLocalStorage('A_RECEBER', 0);
+
+        // Obtém os valores do localStorage
+        let BARRA1 = parseInt(localStorage.getItem('BARRA1'));
+        let BARRA2 = parseInt(localStorage.getItem('BARRA2'));
+        let BARRA3 = parseInt(localStorage.getItem('BARRA3'));
+        let BARRA4 = parseInt(localStorage.getItem('BARRA4'));
+        let BARRA5 = parseInt(localStorage.getItem('BARRA5'));
+        let VALOR_MOEDA_ATUAL = parseInt(localStorage.getItem('VALOR_MOEDA_ATUAL'));
+        let MINHAS_MOEDAS = parseInt(localStorage.getItem('MINHAS_MOEDAS'));
+        let DIA_DE_HOJE = parseInt(localStorage.getItem('DIA_DE_HOJE'));
+        let CARTEIRA = parseInt(localStorage.getItem('CARTEIRA'));
+        let ATT_AUTOMATICO = parseInt(localStorage.getItem('ATT_AUTOMATICO'));
+        let VALOR_QUANDO_COMPROU = parseInt(localStorage.getItem('VALOR_QUANDO_COMPROU'));
+        let A_RECEBER = parseInt(localStorage.getItem('A_RECEBER'));
+
+        // Calcula a variação percentual entre BARRA1 e BARRA2
+        //funcionando
+        let VARIACAO = ((BARRA5 - BARRA4) / BARRA4) * BARRA5;
+        localStorage.setItem('VARIACAO', VARIACAO.toFixed(2));
+
+        //funcionando
+        localStorage.setItem('VALOR_MOEDA_ATUAL', BARRA5);
+
+        //funcionando
+        CARTEIRA = MINHAS_MOEDAS * BARRA5
+        localStorage.setItem('CARTEIRA', CARTEIRA);
+
+
+
+
+        BARRA1 = parseInt(localStorage.getItem('BARRA1'));
+        BARRA2 = parseInt(localStorage.getItem('BARRA2'));
+        BARRA3 = parseInt(localStorage.getItem('BARRA3'));
+        BARRA4 = parseInt(localStorage.getItem('BARRA4'));
+        BARRA5 = parseInt(localStorage.getItem('BARRA5'));
+        VALOR_MOEDA_ATUAL = parseInt(localStorage.getItem('VALOR_MOEDA_ATUAL'));
+
+        MINHAS_MOEDAS = parseInt(localStorage.getItem('MINHAS_MOEDAS'));
+        VARIACAO = localStorage.getItem('VARIACAO')
+        DIA_DE_HOJE = parseInt(localStorage.getItem('DIA_DE_HOJE'));
+        CARTEIRA = parseInt(localStorage.getItem('CARTEIRA'));
+        ATT_AUTOMATICO = parseInt(localStorage.getItem('ATT_AUTOMATICO'));
+        A_RECEBER = parseInt(localStorage.getItem('A_RECEBER'));
+
+        if (DIA_DE_HOJE !== getCurrentDay()) {
+
+
+            localStorage.setItem('BARRA1', BARRA2);
+            BARRA1 = BARRA2;
+            BARRA2 = getRandomValue(parseInt(localStorage.getItem('BARRA1')) - variacaoDeUmDiaProOutro, parseInt(localStorage.getItem('BARRA1')) + variacaoDeUmDiaProOutro);
+            localStorage.setItem('BARRA2', BARRA2);
+
+            //---------------------------------------------
+            localStorage.setItem('BARRA2', BARRA3);
+            BARRA2 = BARRA3;
+            BARRA3 = getRandomValue(parseInt(localStorage.getItem('BARRA2')) - variacaoDeUmDiaProOutro, parseInt(localStorage.getItem('BARRA2')) + variacaoDeUmDiaProOutro);
+            localStorage.setItem('BARRA3', BARRA3);
+
+            //---------------------------------------------
+            localStorage.setItem('BARRA3', BARRA4);
+            BARRA3 = BARRA4;
+            BARRA4 = getRandomValue(parseInt(localStorage.getItem('BARRA3')) - variacaoDeUmDiaProOutro, parseInt(localStorage.getItem('BARRA3')) + variacaoDeUmDiaProOutro);
+            localStorage.setItem('BARRA4', BARRA4);
+
+
+
+            // Atualiza os valores de BARRA1 e BARRA2
+            localStorage.setItem('BARRA4', BARRA5);
+            BARRA4 = BARRA5;
+
+
+            //aumenta se não comprou moedas e diminue se comprou
+            if (MINHAS_MOEDAS > 0) {
+                BARRA5 = getRandomValue(parseInt(localStorage.getItem('BARRA4')) - variacaoDeUmDiaProOutro, parseInt(localStorage.getItem('BARRA4')));
+                localStorage.setItem('BARRA5', BARRA5);
+            }
+            else {
+                BARRA5 = getRandomValue(parseInt(localStorage.getItem('BARRA4')), parseInt(localStorage.getItem('BARRA4')) + variacaoDeUmDiaProOutro);
+                localStorage.setItem('BARRA5', BARRA5);
+            }
+
+
+
+            // Calcula a variação percentual entre BARRA1 e BARRA2
+            //funcionando
+            VARIACAO = ((BARRA5 - BARRA4) / BARRA4) * BARRA5;
+            localStorage.setItem('VARIACAO', VARIACAO.toFixed(2));
+
+            //funcionando
+            localStorage.setItem('VALOR_MOEDA_ATUAL', BARRA5);
+
+            //funcionando
+            CARTEIRA = MINHAS_MOEDAS * BARRA5
+            localStorage.setItem('CARTEIRA', CARTEIRA);
+
+            // Atualiza o dia salvo no localStorage
+            localStorage.setItem('DIA_DE_HOJE', getCurrentDay());
+
+
+        }
+
+
+
+
+
+
+        // Variáveis finais
+        BARRA1 = parseInt(localStorage.getItem('BARRA1'));
+        BARRA2 = parseInt(localStorage.getItem('BARRA2'));
+        BARRA3 = parseInt(localStorage.getItem('BARRA3'));
+        BARRA4 = parseInt(localStorage.getItem('BARRA4'));
+        BARRA5 = parseInt(localStorage.getItem('BARRA5'));
+        VALOR_MOEDA_ATUAL = parseInt(localStorage.getItem('VALOR_MOEDA_ATUAL'));
+
+        MINHAS_MOEDAS = parseInt(localStorage.getItem('MINHAS_MOEDAS'));
+        VARIACAO = localStorage.getItem('VARIACAO')
+        DIA_DE_HOJE = parseInt(localStorage.getItem('DIA_DE_HOJE'));
+        CARTEIRA = parseInt(localStorage.getItem('CARTEIRA'));
+
+        ATT_AUTOMATICO = parseInt(localStorage.getItem('ATT_AUTOMATICO'));
+        A_RECEBER = parseInt(localStorage.getItem('A_RECEBER'));
+
+
+
+
+
+
+        //pegar dia anterior
+        function pegarDiaAnterior(quantosDias) {
+            var dia = new Date().getDate();
+            dia = dia - quantosDias;
+            if (dia >= 1) {
+                return dia
+            } else {
+                dia = 32 - quantosDias;
+                return dia
+            }
+        }
+
+
+        // Função para obter um valor aleatório em um intervalo
+        function getRandomValue(min, max) {
+            let v = Math.floor(Math.random() * (max - min + 1)) + min;
+            if (v === min || v === max)
+                if (v == 0) {
+                    return v + 10
+                }
+                else {
+                    return getRandomValue(min, max)
+                }
+            else
+                return v;
+        }
+
+        // Função para obter o dia atual do mês
+        function getCurrentDay() {
+            return new Date().getDate();
+        }
+
+
+
+        // Verifica se o dado existe no localStorage, caso contrário, define um valor padrão
+        function initializeLocalStorage(key, defaultValue) {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, defaultValue);
+            }
+        }
+
+
+
+        desenharGafico()
+        attTextos()
+
+
+
+        if (ATT_AUTOMATICO == 1) {
+            document.getElementById('ATT_AUTOMATICO').checked = true;
+            var intervaloLoop = getRandomValue(5000, 10000)
+            console.log(intervaloLoop)
+
+            setTimeout(() => {
+                //desenharGafico()
+                window.location.reload()
+            }, intervaloLoop);
+        } else {
+            document.getElementById('ATT_AUTOMATICO').checked = false;
+        }
+
+
+
+
+        function log(t) {
+            var d = new Date().getDate()
+            var m = new Date().getMonth()
+            var a = new Date().getFullYear()
+            var h = new Date().getHours()
+            var min = new Date().getMinutes()
+            var full = '[' + d + '/' + m + '/' + a + ' - ' + h + ':' + min + '] '
+            if (localStorage.getItem('LOG').length >= 1000) {
+                localStorage.setItem('LOG', 'Reiniciou o log');
+            }
+            localStorage.setItem('LOG', localStorage.getItem('LOG') + '\n' + full + ': ' + t);
+        }
+        console.log(localStorage.getItem('LOG'))
+
+
+        function attTextos() {
+
+            BARRA1 = parseInt(localStorage.getItem('BARRA1'));
+            BARRA2 = parseInt(localStorage.getItem('BARRA2'));
+            BARRA3 = parseInt(localStorage.getItem('BARRA3'));
+            BARRA4 = parseInt(localStorage.getItem('BARRA4'));
+            BARRA5 = parseInt(localStorage.getItem('BARRA5'));
+            VALOR_MOEDA_ATUAL = parseInt(localStorage.getItem('VALOR_MOEDA_ATUAL'));
+
+            MINHAS_MOEDAS = parseInt(localStorage.getItem('MINHAS_MOEDAS'));
+            VARIACAO = localStorage.getItem('VARIACAO')
+            DIA_DE_HOJE = parseInt(localStorage.getItem('DIA_DE_HOJE'));
+            CARTEIRA = parseInt(localStorage.getItem('CARTEIRA'));
+            ATT_AUTOMATICO = parseInt(localStorage.getItem('ATT_AUTOMATICO'));
+            VALOR_QUANDO_COMPROU = parseInt(localStorage.getItem('VALOR_QUANDO_COMPROU'));
+            //-----------------------------------------
+            document.getElementById("VALOR_MOEDA_ATUAL").innerHTML = '<br>R$ ' + VALOR_MOEDA_ATUAL + '.00</b>'
+
+            document.getElementById("MINHAS_MOEDAS").innerHTML = 'Carteira: <b style="color:lime">' + MINHAS_MOEDAS + '</b> moedas'
+            //document.getElementById("DIA_DE_HOJE").innerHTML = 'DIA_DE_HOJE: ' + DIA_DE_HOJE
+            document.getElementById("CARTEIRA").innerHTML = 'Acumulado: <b>R$ ' + CARTEIRA + '.00</b>&nbsp;&nbsp;'
+
+
+
+            if (VARIACAO > 0) {
+                sombras('lime')
+                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:lime;font-size:13px">&#8599; ' + VARIACAO + '%</font>'
+            }
+            else if (VARIACAO < 0) {
+                sombras('red')
+                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:red;font-size:13px">&#8600; ' + VARIACAO + '%</font>'
+            }
+            else {
+                sombras('yellow')
+                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:yellow;font-size:13px">&#8605; ' + VARIACAO + '%</font>'
+            }
+
+            //----------------------
+            if (MINHAS_MOEDAS > 0) {
+                document.getElementById('venderMoedas').textContent = 'Vender tudo por R$ ' + CARTEIRA + '.00'
+            }
+            else {
+                document.getElementById('venderMoedas').style.display = 'none'
+            }
+            //-----------------------------------------------------
+            document.getElementById('addMoedas').textContent = 'Comprar'
+            document.getElementById('A_RECEBER').innerHTML = 'Valor a Receber: <b>R$ ' + A_RECEBER + '.00</b>'
+
+
+        }
+
+        function sombras(cor) {
+            var divs = document.querySelectorAll('div')
+            divs.forEach(e => {
+                e.style.boxShadow = '0px 0px 5px ' + cor
+            });
+            //
+        }
+
+
+        function desenharGafico() {
+
+
+            var ctx = document.getElementById('lineChart').getContext('2d');
+
+            var lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        'Dia ' + pegarDiaAnterior(4),
+                        'Dia ' + pegarDiaAnterior(3),
+                        'Dia ' + pegarDiaAnterior(2),
+                        'Dia ' + pegarDiaAnterior(1),
+                        'Hoje',
+                    ],
+
+                    datasets: [{
+                        label: 'Preço R$ ',
+                        labels: [
+                            'Dia ' + DIA_DE_HOJE - 4,
+                            'Dia ' + DIA_DE_HOJE - 3,
+                            'Dia ' + DIA_DE_HOJE - 2,
+                            'Dia ' + DIA_DE_HOJE - 1,
+                            'Hoje',
+                        ],
+                        data: [
+                            BARRA1,
+                            BARRA2,
+                            BARRA3,
+                            BARRA4,
+                            BARRA5,
+                        ],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#fff'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+
+        //VALOR_QUANDO_COMPROU
+        calcularLucros()
+        function calcularLucros() {
+            if (MINHAS_MOEDAS >= 1) {
+                var ganhos = (VALOR_MOEDA_ATUAL - VALOR_QUANDO_COMPROU) / 100
+                if (ganhos > 0) {
+                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:lime;font-size:13px">>&#8599; ' + ganhos + '%</font>'
+                } else if (ganhos == 0) {
+                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:yellow;font-size:13px">&#8605; ' + ganhos + '%</font>'
+                }
+                else {
+                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:red;font-size:13px">&#8600; ' + ganhos + '%</font>'
+                }
+
+            } else {
+                document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = ''
+
+            }
+        }
+
+        log('Minhas moedas: ' + MINHAS_MOEDAS + ' moedas, valor atual da moeda em R$ ' + VALOR_MOEDA_ATUAL + '.00, total de R$ ' + CARTEIRA + '.00')
+
+    </script>
+</body>
+
+</html>
