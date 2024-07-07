@@ -79,7 +79,9 @@
 </head>
 
 <body>
-    <center><h4>BCoin</h4></center>
+    <center>
+        <h4 id="meunome">BCoin</h4>
+    </center>
 
     <div>
 
@@ -144,6 +146,7 @@
         <label for="ATT_AUTOMATICO">Atualizar Automaticamente</label>
 
         <button id="venderMoedas">venderMoedas</button>
+        <button id="venderFundos">venderFundos</button>
 
 
     </div>
@@ -156,7 +159,14 @@
 
     <script>
 
+        //icones setas
+        const setacima =    '&#11181;'
+        const setabaixo =   '&#11182;'
 
+
+        if (localStorage.getItem('meunome') && localStorage.getItem('meunome') !== '') {
+            document.getElementById('meunome').innerHTML = 'BCoin<br>Bem vindo(a) ' + localStorage.getItem('meunome')
+        }
 
         const variacaoDeUmDiaProOutro = 10;
 
@@ -193,9 +203,10 @@
             log('vendeu moedas,tinha ' + MINHAS_MOEDAS + ' moedas, valor atual da moeda em R$ ' + VALOR_MOEDA_ATUAL + '.00, total de R$ ' + CARTEIRA + '.00')
             localStorage.setItem('MINHAS_MOEDAS', 0);
             localStorage.setItem('A_RECEBER', parseInt(localStorage.getItem('A_RECEBER')) + CARTEIRA);
-
+            
             window.location.reload()
 
+            //console.log(crip(localStorage.getItem('LOG')+getCurrentDay()+'-A_RECEBER = '+localStorage.getItem('A_RECEBER')))
         })
 
         document.getElementById('ATT_AUTOMATICO').addEventListener('click', () => {
@@ -211,6 +222,12 @@
 
         document.getElementById('Lorem').addEventListener('click', () => {
             window.location.href = 'clear.html'
+        })
+
+
+
+        document.getElementById('venderFundos').addEventListener('click', () => {
+            window.location.href = 'vender.html'
         })
 
 
@@ -233,6 +250,7 @@
         initializeLocalStorage('LOG', '');
         initializeLocalStorage('VALOR_QUANDO_COMPROU', 0);
         initializeLocalStorage('A_RECEBER', 0);
+        initializeLocalStorage('meunome', '');
 
         // Obtém os valores do localStorage
         let BARRA1 = parseInt(localStorage.getItem('BARRA1'));
@@ -465,23 +483,30 @@
 
             if (VARIACAO > 0) {
                 sombras('lime')
-                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:lime;font-size:13px">&#8599; ' + VARIACAO + '%</font>'
+                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:lime;font-size:13px">'+setacima+' ' + VARIACAO + '%</font>'
             }
             else if (VARIACAO < 0) {
                 sombras('red')
-                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:red;font-size:13px">&#8600; ' + VARIACAO + '%</font>'
+                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:red;font-size:13px">'+setabaixo+' ' + VARIACAO + '%</font>'
             }
             else {
                 sombras('yellow')
-                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:yellow;font-size:13px">&#8605; ' + VARIACAO + '%</font>'
+                document.getElementById("VARIACAO").innerHTML = '&nbsp;&nbsp;<font style="color:yellow;font-size:13px">'+setabaixo+' ' + VARIACAO + '%</font>'
             }
 
             //----------------------
             if (MINHAS_MOEDAS > 0) {
-                document.getElementById('venderMoedas').textContent = 'Vender tudo por R$ ' + CARTEIRA + '.00'
+                document.getElementById('venderMoedas').textContent = 'Vender todas moedas por R$ ' + CARTEIRA + '.00'
             }
             else {
                 document.getElementById('venderMoedas').style.display = 'none'
+            }
+            //----------------------
+            if (A_RECEBER > 0) {
+                document.getElementById('venderFundos').textContent = 'Receber fundos por R$ ' + A_RECEBER + '.00'
+            }
+            else {
+                document.getElementById('venderFundos').style.display = 'none'
             }
             //-----------------------------------------------------
             document.getElementById('addMoedas').textContent = 'Comprar'
@@ -562,12 +587,12 @@
             if (MINHAS_MOEDAS >= 1) {
                 var ganhos = (VALOR_MOEDA_ATUAL - VALOR_QUANDO_COMPROU) / 100
                 if (ganhos > 0) {
-                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:lime;font-size:13px">>&#8599; ' + ganhos + '%</font>'
+                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:lime;font-size:13px">'+setacima+' ' + ganhos + '%</font>'
                 } else if (ganhos == 0) {
-                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:yellow;font-size:13px">&#8605; ' + ganhos + '%</font>'
+                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:yellow;font-size:13px">'+setabaixo+' ' + ganhos + '%</font>'
                 }
                 else {
-                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:red;font-size:13px">&#8600; ' + ganhos + '%</font>'
+                    document.getElementById('VALOR_QUANDO_COMPROU').innerHTML = '<font style="color:red;font-size:13px">'+setabaixo+' ' + ganhos + '%</font>'
                 }
 
             } else {
@@ -576,6 +601,99 @@
             }
         }
 
+
+        function crip(t) {
+
+            for (let mm = 0; mm < 100; mm++) {
+                t = t.replace('a', '⣋⣕⣅⣮⣴⣆⣵⣘⣇')// t= t.replace('⣋⣕⣅⣮⣴⣆⣵⣘⣇','a')
+                t = t.replace('b', '⣰⣀⣄⣁⣝⣩⣠⣑⣡')// t= t.replace('⣰⣀⣄⣁⣝⣩⣠⣑⣡','b')
+                t = t.replace('c', '⣋⣚⣂⣵⣑⣫⣪⢼⣠')// t= t.replace('⣋⣚⣂⣵⣑⣫⣪⢼⣠','c')
+                t = t.replace('d', '⣴⢻⣵⣺⣕⣽⣤⣚⣢')// t= t.replace('⣴⢻⣵⣺⣕⣽⣤⣚⣢','d')
+                t = t.replace('e', '⣵⣙⢾⣸⣱⣨⣒⣙⢹')// t= t.replace('⣵⣙⢾⣸⣱⣨⣒⣙⢹','e')
+                t = t.replace('f', '⣡⣜⣥⣰⣧⣕⣚⣐⣘')// t= t.replace('⣡⣜⣥⣰⣧⣕⣚⣐⣘','f')
+                t = t.replace('g', '⣶⣹⣆⣅⢽⣱⣂⣄⣕')// t= t.replace('⣶⣹⣆⣅⢽⣱⣂⣄⣕','g')
+                t = t.replace('h', '⣓⣇⢿⣪⣜⣭⣛⣽⣟')// t= t.replace('⣓⣇⢿⣪⣜⣭⣛⣽⣟','h')
+                t = t.replace('i', '⣢⣳⣲⣇⣎⣢⣍⣜⣆')// t= t.replace('⣢⣳⣲⣇⣎⣢⣍⣜⣆','i')
+                t = t.replace('j', '⢼⣸⣫⢼⣾⢹⣚⣰⣾')// t= t.replace('⢼⣸⣫⢼⣾⢹⣚⣰⣾','j')
+                t = t.replace('k', '⣊⣡⣡⣞⣤⣙⣃⣟⣤')// t= t.replace('⣊⣡⣡⣞⣤⣙⣃⣟⣤','k')
+                t = t.replace('l', '⣁⣗⣓⣻⣏⣮⣐⣆⢽')// t= t.replace('⣁⣗⣓⣻⣏⣮⣐⣆⢽','l')
+                t = t.replace('m', '⣨⣦⣸⣶⢽⣒⣴⣝⣚')// t= t.replace('⣨⣦⣸⣶⢽⣒⣴⣝⣚','m')
+                t = t.replace('o', '⣏⣚⣸⣊⣱⢾⣂⢽⣵')// t= t.replace('⣏⣚⣸⣊⣱⢾⣂⢽⣵','o')
+                t = t.replace('p', '⣇⣲⣏⢾⣺⣫⣞⣈⢼')// t= t.replace('⣇⣲⣏⢾⣺⣫⣞⣈⢼','p')
+                t = t.replace('q', '⣷⣷⣼⣥⣲⣻⣐⣲⣦')// t= t.replace('⣷⣷⣼⣥⣲⣻⣐⣲⣦','q')
+                t = t.replace('r', '⣓⣊⣓⣬⣩⣀⣤⣫⣜')// t= t.replace('⣓⣊⣓⣬⣩⣀⣤⣫⣜','r')
+                t = t.replace('s', '⣑⣄⣃⣴⢽⣞⣯⣝⣄')// t= t.replace('⣑⣄⣃⣴⢽⣞⣯⣝⣄','s')
+                t = t.replace('t', '⣰⢹⣴⣦⣽⣊⢺⣃⣼')// t= t.replace('⣰⢹⣴⣦⣽⣊⢺⣃⣼','t')
+                t = t.replace('u', '⣫⣣⣯⣟⣘⣥⣗⣭⣉')// t= t.replace('⣫⣣⣯⣟⣘⣥⣗⣭⣉','u')
+                t = t.replace('v', '⣵⣉⣠⣗⣉⣝⣝⢽⢻')// t= t.replace('⣵⣉⣠⣗⣉⣝⣝⢽⢻','v')
+                t = t.replace('w', '⣛⢼⢿⣐⣉⣟⣓⣛⢿')// t= t.replace('⣛⢼⢿⣐⣉⣟⣓⣛⢿','w')
+                t = t.replace('x', '⣤⣇⣹⢺⣉⣪⣜⣆⣕')// t= t.replace('⣤⣇⣹⢺⣉⣪⣜⣆⣕','x')
+                t = t.replace('y', '⣨⣒⣊⣬⣔⣁⣢⣐⣚')// t= t.replace('⣨⣒⣊⣬⣔⣁⣢⣐⣚','y')
+                t = t.replace('z', '⣑⣸⣸⣟⣌⣜⣲⣳⣌')// t= t.replace('⣑⣸⣸⣟⣌⣜⣲⣳⣌','z')
+                t = t.replace('0', '⣊⣦⣥⣚⣘⣽⣞⣳⣌')// t= t.replace('⣊⣦⣥⣚⣘⣽⣞⣳⣌','0')
+                t = t.replace('9', '⣬⣯⣚⣯⣘⣖⣍⣃⣥')// t= t.replace('⣬⣯⣚⣯⣘⣖⣍⣃⣥','9')
+                t = t.replace('8', '⣊⣽⢹⣄⣙⣅⣂⣛⣐')// t= t.replace('⣊⣽⢹⣄⣙⣅⣂⣛⣐','8')
+                t = t.replace('7', '⣎⣥⣋⣷⣅⣉⣄⣻⣑')// t= t.replace('⣎⣥⣋⣷⣅⣉⣄⣻⣑','7')
+                t = t.replace('7', '⣤⣑⣥⣅⣜⣇⣓⣧⣯')// t= t.replace('⣤⣑⣥⣅⣜⣇⣓⣧⣯','7')
+                t = t.replace('6', '⣶⣒⣭⣥⣗⣺⣛⣓⣶')// t= t.replace('⣶⣒⣭⣥⣗⣺⣛⣓⣶','6')
+                t = t.replace('5', '⣃⣏⣨⢾⣇⣽⣔⣇⢻')// t= t.replace('⣃⣏⣨⢾⣇⣽⣔⣇⢻','5')
+                t = t.replace('4', '⣄⣹⢿⣩⢾⣬⣐⣙⣵')// t= t.replace('⣄⣹⢿⣩⢾⣬⣐⣙⣵','4')
+                t = t.replace('3', '⣏⣲⣯⣦⣹⣻⣘⣇⣣')// t= t.replace('⣏⣲⣯⣦⣹⣻⣘⣇⣣','3')
+                t = t.replace('2', '⢿⣄⣓⣈⣉⣷⣱⣆⣾')// t= t.replace('⢿⣄⣓⣈⣉⣷⣱⣆⣾','2')
+                t = t.replace('1', '⣢⣃⣊⣚⣎⣨⣺⣒⣵')// t= t.replace('⣢⣃⣊⣚⣎⣨⣺⣒⣵','1')
+                t = t.replace('[', '⣁⣬⣠⣛⣴⣁⣨⣱⣇')// t= t.replace('⣁⣬⣠⣛⣴⣁⣨⣱⣇','[')
+                t = t.replace(']', '⣔⣹⣗⣾⣯⣯⣟⣁⣐')// t= t.replace('⣔⣹⣗⣾⣯⣯⣟⣁⣐',']')
+                t = t.replace('{', '⣑⣛⢾⣧⣉⣆⣟⣉⣦')// t= t.replace('⣑⣛⢾⣧⣉⣆⣟⣉⣦','{')
+                t = t.replace('}', '⣥⣪⣪⢻⣣⣇⣐⣯⣶')// t= t.replace('⣥⣪⣪⢻⣣⣇⣐⣯⣶','}')
+                t = t.replace(';', '⣺⣭⣝⣢⣏⣋⣹⣽⣩')// t= t.replace('⣺⣭⣝⣢⣏⣋⣹⣽⣩',';')
+                t = t.replace('.', '⣙⣱⣍⣡⣑⣌⣀⣗⣠')// t= t.replace('⣙⣱⣍⣡⣑⣌⣀⣗⣠','.')
+                t = t.replace(',', '⣴⢺⣗⣦⣵⣼⣠⣈⣁')// t= t.replace('⣴⢺⣗⣦⣵⣼⣠⣈⣁',',')
+                t = t.replace('=', '⢽⣺⣱⣼⣛⣹⣷⣧⢼')// t= t.replace('⢽⣺⣱⣼⣛⣹⣷⣧⢼','=')
+                t = t.replace('-', '⣤⣐⣊⣆⣷⣽⢾⣻⣚')// t= t.replace('⣤⣐⣊⣆⣷⣽⢾⣻⣚','-')
+                t = t.replace('+', '⣢⣼⣲⣻⣕⣉⣘⣂⣵')// t= t.replace('⣢⣼⣲⣻⣕⣉⣘⣂⣵','+')
+                t = t.replace('_', '⣴⢿⣈⣵⣵⣼⣠⣪⣚')// t= t.replace('⣴⢿⣈⣵⣵⣼⣠⣪⣚','_')
+                t = t.replace(')', '⣎⣧⣦⣇⣚⣁⣋⣸⣕')// t= t.replace('⣎⣧⣦⣇⣚⣁⣋⣸⣕',')')
+                t = t.replace('(', '⣘⣎⢽⣽⣛⣖⣹⣌⣕')// t= t.replace('⣘⣎⢽⣽⣛⣖⣹⣌⣕','(')
+                t = t.replace('*', '⣤⣞⣠⣊⣞⣍⣜⣁⣲')// t= t.replace('⣤⣞⣠⣊⣞⣍⣜⣁⣲','*')
+                t = t.replace('&', '⣔⣊⣳⣞⣨⣦⣤⣐⣊')// t= t.replace('⣔⣊⣳⣞⣨⣦⣤⣐⣊','&')
+                t = t.replace('%', '⣒⢾⣛⣱⣊⣴⣽⢺⣠')// t= t.replace('⣒⢾⣛⣱⣊⣴⣽⢺⣠','%')
+                t = t.replace('$', '⣮⣥⣼⢾⢿⣂⣁⣓⣁')// t= t.replace('⣮⣥⣼⢾⢿⣂⣁⣓⣁','$')
+                t = t.replace('#', '⣻⢹⣙⣏⣙⣜⢼⣛⣃')// t= t.replace('⣻⢹⣙⣏⣙⣜⢼⣛⣃','#')
+                t = t.replace('@', '⣦⣽⣈⣤⣱⣙⣪⣐⢽')// t= t.replace('⣦⣽⣈⣤⣱⣙⣪⣐⢽','@')
+                t = t.replace('!', '⣥⢻⣲⣘⣭⣂⣨⣐⢺')// t= t.replace('⣥⢻⣲⣘⣭⣂⣨⣐⢺','!')
+                t = t.replace('?', '⣰⣡⣇⣸⣌⣄⣪⣥⣨')// t= t.replace('⣰⣡⣇⣸⣌⣄⣪⣥⣨','?')
+                t = t.replace(':', '⣥⣙⣈⢼⣭⣃⣟⣈⣬')// t= t.replace('⣥⣙⣈⢼⣭⣃⣟⣈⣬',':')
+                t = t.replace('>', '⣔⣔⣕⣤⣭⣄⣹⣛⢼')// t= t.replace('⣔⣔⣕⣤⣭⣄⣹⣛⢼','>')
+                t = t.replace('<', '⣐⣲⣀⣩⣒⣱⣤⣀⣾')// t= t.replace('⣐⣲⣀⣩⣒⣱⣤⣀⣾','<')
+                t = t.replace('A', '⣑⣡⣡⣻⣺⣋⣖⣠⣌')// t= t.replace('⣑⣡⣡⣻⣺⣋⣖⣠⣌','A')
+                t = t.replace('B', '⣇⣣⢾⣑⣒⣝⣧⢿⣽')// t= t.replace('⣇⣣⢾⣑⣒⣝⣧⢿⣽','B')
+                t = t.replace('C', '⣆⣦⣞⣰⣝⣪⣥⢹⣭')// t= t.replace('⣆⣦⣞⣰⣝⣪⣥⢹⣭','C')
+                t = t.replace('D', '⣯⣓⣧⣓⣘⣸⣚⣙⣄')// t= t.replace('⣯⣓⣧⣓⣘⣸⣚⣙⣄','D')
+                t = t.replace('E', '⣭⢿⣤⣼⣬⢿⣰⣚⢽')// t= t.replace('⣭⢿⣤⣼⣬⢿⣰⣚⢽','E')
+                t = t.replace('F', '⣓⣥⣘⢼⣋⣲⣞⣐⣘')// t= t.replace('⣓⣥⣘⢼⣋⣲⣞⣐⣘','F')
+                t = t.replace('G', '⣍⣨⣘⣭⣳⣹⣨⢽⣆')// t= t.replace('⣍⣨⣘⣭⣳⣹⣨⢽⣆','G')
+                t = t.replace('H', '⣸⣊⣺⣟⣏⣢⣳⣀⣣')// t= t.replace('⣸⣊⣺⣟⣏⣢⣳⣀⣣','H')
+                t = t.replace('I', '⣢⣍⣭⢹⣊⣜⣺⢾⣳')// t= t.replace('⣢⣍⣭⢹⣊⣜⣺⢾⣳','I')
+                t = t.replace('J', '⣤⣊⣜⣼⣧⣲⣬⣷⢿')// t= t.replace('⣤⣊⣜⣼⣧⣲⣬⣷⢿','J')
+                t = t.replace('K', '⣛⢿⣅⣞⣁⣣⣟⣽⣡')// t= t.replace('⣛⢿⣅⣞⣁⣣⣟⣽⣡','K')
+                t = t.replace('L', '⣺⣸⣷⣆⣵⣁⣳⣸⣂')// t= t.replace('⣺⣸⣷⣆⣵⣁⣳⣸⣂','L')
+                t = t.replace('M', '⣔⢹⣺⣶⣙⣵⣐⣻⣟')// t= t.replace('⣔⢹⣺⣶⣙⣵⣐⣻⣟','M')
+                t = t.replace('N', '⣅⣩⣊⣳⣏⣚⣒⣰⣚')// t= t.replace('⣅⣩⣊⣳⣏⣚⣒⣰⣚','N')
+                t = t.replace('O', '⣦⣵⢽⣼⣇⣜⣾⢻⣭')// t= t.replace('⣦⣵⢽⣼⣇⣜⣾⢻⣭','O')
+                t = t.replace('P', '⣧⢾⣳⣄⣫⣏⣍⣙⢿')// t= t.replace('⣧⢾⣳⣄⣫⣏⣍⣙⢿','P')
+                t = t.replace('Q', '⣡⣧⣻⣝⣔⣓⣇⣤⣬')// t= t.replace('⣡⣧⣻⣝⣔⣓⣇⣤⣬','Q')
+                t = t.replace('R', '⣝⣐⢿⣰⣻⣋⣔⣧⣉')// t= t.replace('⣝⣐⢿⣰⣻⣋⣔⣧⣉','R')
+                t = t.replace('S', '⣺⢿⢽⣽⣸⣅⣜⣹⣰')// t= t.replace('⣺⢿⢽⣽⣸⣅⣜⣹⣰','S')
+                t = t.replace('T', '⣍⣱⣌⣭⢿⣞⣢⣑⣼')// t= t.replace('⣍⣱⣌⣭⢿⣞⣢⣑⣼','T')
+                t = t.replace('U', '⣹⣻⣅⣆⣷⣌⣓⣽⣉')// t= t.replace('⣹⣻⣅⣆⣷⣌⣓⣽⣉','U')
+                t = t.replace('V', '⣫⣈⣯⢺⣢⣯⣟⣜⣞')// t= t.replace('⣫⣈⣯⢺⣢⣯⣟⣜⣞','V')
+                t = t.replace('W', '⢼⣽⣉⣕⣊⣭⣦⣺⣄')// t= t.replace('⢼⣽⣉⣕⣊⣭⣦⣺⣄','W')
+                t = t.replace('X', '⢿⣄⣹⣼⢿⣭⣁⢽⣩')// t= t.replace('⢿⣄⣹⣼⢿⣭⣁⢽⣩','X')
+                t = t.replace('Y', '⣷⣳⣒⣓⢽⣴⣗⣣⣃')// t= t.replace('⣷⣳⣒⣓⢽⣴⣗⣣⣃','Y')
+                t = t.replace('Z', '⣴⣴⣇⣉⣭⢿⣩⣍⣵')// t= t.replace('⣴⣴⣇⣉⣭⢿⣩⣍⣵','Z')
+            }
+            return t;
+        }
         log('Minhas moedas: ' + MINHAS_MOEDAS + ' moedas, valor atual da moeda em R$ ' + VALOR_MOEDA_ATUAL + '.00, total de R$ ' + CARTEIRA + '.00')
 
     </script>

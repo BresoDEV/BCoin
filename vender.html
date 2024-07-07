@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCoin - Dashboard</title>
+    
+    <style>
+        body {
+            user-select: none;
+
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        * {
+            cursor: pointer;
+        }
+
+        canvas {
+            background-color: #333;
+            width: 100%;
+        }
+
+        textarea {
+            background-color: #333;
+            width: 96%;
+            border: 1px solid #666;
+            border-radius: 5px;
+            padding: 2%;
+            resize: none;
+            color: aliceblue;
+        }
+
+        tr {
+            border: 1px solid #666;
+        }
+
+        p {
+            color: rgb(251, 255, 0);
+        }
+
+        div {
+            border: 1px solid #666;
+            width: 90%;
+            border-radius: 15px;
+            margin-left: 2%;
+            padding: 3%;
+            margin-top: 15px;
+
+        }
+
+        button {
+            border: 1px solid #666;
+            background: rgb(87, 111, 87);
+            width: 100%;
+            border-radius: 5px;
+            padding: 10px;
+            color: aliceblue;
+            margin-top: 5px;
+
+        }
+
+        .btComprar {
+            border: 1px solid #666;
+            background: rgb(85, 146, 85);
+
+            border-radius: 5px;
+            padding: 10px;
+            color: aliceblue;
+            margin-right: 2%;
+            float: right;
+            font-size: 10px;
+        }
+
+        font {
+            font-weight: bolder;
+
+        }
+    </style>
+    <script src="chart.js"></script>
+</head>
+
+<body>
+    <center>
+        <h4 id="meunome">BCoin</h4>
+    </center>
+
+
+    <div>
+
+        <center>
+            <p id="info"></p>
+        </center>
+        <textarea name="" id="token" cols="30" rows="10"></textarea>
+
+        <button id="venderMoedas">Gerar Token de Venda</button>
+        <button id="voltar">Voltar</button>
+
+
+    </div>
+
+
+
+
+
+
+
+    <script>
+
+        document.getElementById('meunome').innerHTML = 'BCoin<br>Fundos: R$ ' + localStorage.getItem('A_RECEBER')+'.00'
+
+
+
+        document.getElementById('venderMoedas').addEventListener('click', () => {
+
+            if (parseInt(localStorage.getItem('A_RECEBER')) > 0) {
+                document.getElementById('token').value = crip(localStorage.getItem('LOG') + getCurrentDay() + '- A_RECEBER = ' + localStorage.getItem('A_RECEBER'))
+                localStorage.setItem('A_RECEBER', 0);
+
+                document.getElementById('info').innerHTML = 'Codigo unico gerado com sucesso!<br>Copie ele por completo, pois <font style="color:red">seus fundos já foram zerados!!</font><br>Sua única garantia para receber seus fundos, é esse código.<br><br>Você tem até <font style="color:red">3 dias</font> pra enviar esse código ao nosso suporte. Passado esse tempo, o código será invalidado'
+
+            }
+            else {
+                document.getElementById('info').innerHTML = 'Você não possue fundos disponíveis no momento<br><br>Aguarde, vamos voltar ao inicio...'
+                document.getElementById('token').value = '';
+
+                setTimeout(() => {
+                    window.location.href = 'index.html'
+
+                }, 5000);
+            }
+
+        })
+        document.getElementById('voltar').addEventListener('click', () => {
+
+
+            window.location.href = 'index.html'//()
+            //document.getElementById('token').value = decrip(document.getElementById('token').value)
+
+
+        })
+        document.getElementById('token').addEventListener('click', () => {
+            document.getElementById('token').focus()
+
+        })
+
+
+        function getCurrentDay() {
+            return new Date().getDate();
+        }
+
+
+
+        function crip(t) {
+
+for (let mm = 0; mm < 100; mm++) {
+    t = t.replace('a', '⣋⣕⣅⣮⣴⣆⣵⣘⣇')// t= t.replace('⣋⣕⣅⣮⣴⣆⣵⣘⣇','a')
+    t = t.replace('b', '⣰⣀⣄⣁⣝⣩⣠⣑⣡')// t= t.replace('⣰⣀⣄⣁⣝⣩⣠⣑⣡','b')
+    t = t.replace('c', '⣋⣚⣂⣵⣑⣫⣪⢼⣠')// t= t.replace('⣋⣚⣂⣵⣑⣫⣪⢼⣠','c')
+    t = t.replace('d', '⣴⢻⣵⣺⣕⣽⣤⣚⣢')// t= t.replace('⣴⢻⣵⣺⣕⣽⣤⣚⣢','d')
+    t = t.replace('e', '⣵⣙⢾⣸⣱⣨⣒⣙⢹')// t= t.replace('⣵⣙⢾⣸⣱⣨⣒⣙⢹','e')
+    t = t.replace('f', '⣡⣜⣥⣰⣧⣕⣚⣐⣘')// t= t.replace('⣡⣜⣥⣰⣧⣕⣚⣐⣘','f')
+    t = t.replace('g', '⣶⣹⣆⣅⢽⣱⣂⣄⣕')// t= t.replace('⣶⣹⣆⣅⢽⣱⣂⣄⣕','g')
+    t = t.replace('h', '⣓⣇⢿⣪⣜⣭⣛⣽⣟')// t= t.replace('⣓⣇⢿⣪⣜⣭⣛⣽⣟','h')
+    t = t.replace('i', '⣢⣳⣲⣇⣎⣢⣍⣜⣆')// t= t.replace('⣢⣳⣲⣇⣎⣢⣍⣜⣆','i')
+    t = t.replace('j', '⢼⣸⣫⢼⣾⢹⣚⣰⣾')// t= t.replace('⢼⣸⣫⢼⣾⢹⣚⣰⣾','j')
+    t = t.replace('k', '⣊⣡⣡⣞⣤⣙⣃⣟⣤')// t= t.replace('⣊⣡⣡⣞⣤⣙⣃⣟⣤','k')
+    t = t.replace('l', '⣁⣗⣓⣻⣏⣮⣐⣆⢽')// t= t.replace('⣁⣗⣓⣻⣏⣮⣐⣆⢽','l')
+    t = t.replace('m', '⣨⣦⣸⣶⢽⣒⣴⣝⣚')// t= t.replace('⣨⣦⣸⣶⢽⣒⣴⣝⣚','m')
+    t = t.replace('n', '⣶⢽⣶⢽⣶⢽⣶⢽⣶')// t= t.replace('⣨⣦⣸⣶⢽⣒⣴⣝⣚','m')
+    t = t.replace('o', '⣏⣚⣸⣊⣱⢾⣂⢽⣵')// t= t.replace('⣏⣚⣸⣊⣱⢾⣂⢽⣵','o')
+    t = t.replace('p', '⣇⣲⣏⢾⣺⣫⣞⣈⢼')// t= t.replace('⣇⣲⣏⢾⣺⣫⣞⣈⢼','p')
+    t = t.replace('q', '⣷⣷⣼⣥⣲⣻⣐⣲⣦')// t= t.replace('⣷⣷⣼⣥⣲⣻⣐⣲⣦','q')
+    t = t.replace('r', '⣓⣊⣓⣬⣩⣀⣤⣫⣜')// t= t.replace('⣓⣊⣓⣬⣩⣀⣤⣫⣜','r')
+    t = t.replace('s', '⣑⣄⣃⣴⢽⣞⣯⣝⣄')// t= t.replace('⣑⣄⣃⣴⢽⣞⣯⣝⣄','s')
+    t = t.replace('t', '⣰⢹⣴⣦⣽⣊⢺⣃⣼')// t= t.replace('⣰⢹⣴⣦⣽⣊⢺⣃⣼','t')
+    t = t.replace('u', '⣫⣣⣯⣟⣘⣥⣗⣭⣉')// t= t.replace('⣫⣣⣯⣟⣘⣥⣗⣭⣉','u')
+    t = t.replace('v', '⣵⣉⣠⣗⣉⣝⣝⢽⢻')// t= t.replace('⣵⣉⣠⣗⣉⣝⣝⢽⢻','v')
+    t = t.replace('w', '⣛⢼⢿⣐⣉⣟⣓⣛⢿')// t= t.replace('⣛⢼⢿⣐⣉⣟⣓⣛⢿','w')
+    t = t.replace('x', '⣤⣇⣹⢺⣉⣪⣜⣆⣕')// t= t.replace('⣤⣇⣹⢺⣉⣪⣜⣆⣕','x')
+    t = t.replace('y', '⣨⣒⣊⣬⣔⣁⣢⣐⣚')// t= t.replace('⣨⣒⣊⣬⣔⣁⣢⣐⣚','y')
+    t = t.replace('z', '⣑⣸⣸⣟⣌⣜⣲⣳⣌')// t= t.replace('⣑⣸⣸⣟⣌⣜⣲⣳⣌','z')
+    t = t.replace('0', '⣊⣦⣥⣚⣘⣽⣞⣳⣌')// t= t.replace('⣊⣦⣥⣚⣘⣽⣞⣳⣌','0')
+    t = t.replace('9', '⣬⣯⣚⣯⣘⣖⣍⣃⣥')// t= t.replace('⣬⣯⣚⣯⣘⣖⣍⣃⣥','9')
+    t = t.replace('8', '⣊⣽⢹⣄⣙⣅⣂⣛⣐')// t= t.replace('⣊⣽⢹⣄⣙⣅⣂⣛⣐','8')
+    t = t.replace('7', '⣎⣥⣋⣷⣅⣉⣄⣻⣑')// t= t.replace('⣎⣥⣋⣷⣅⣉⣄⣻⣑','7')
+    t = t.replace('7', '⣤⣑⣥⣅⣜⣇⣓⣧⣯')// t= t.replace('⣤⣑⣥⣅⣜⣇⣓⣧⣯','7')
+    t = t.replace('6', '⣶⣒⣭⣥⣗⣺⣛⣓⣶')// t= t.replace('⣶⣒⣭⣥⣗⣺⣛⣓⣶','6')
+    t = t.replace('5', '⣃⣏⣨⢾⣇⣽⣔⣇⢻')// t= t.replace('⣃⣏⣨⢾⣇⣽⣔⣇⢻','5')
+    t = t.replace('4', '⣄⣹⢿⣩⢾⣬⣐⣙⣵')// t= t.replace('⣄⣹⢿⣩⢾⣬⣐⣙⣵','4')
+    t = t.replace('3', '⣏⣲⣯⣦⣹⣻⣘⣇⣣')// t= t.replace('⣏⣲⣯⣦⣹⣻⣘⣇⣣','3')
+    t = t.replace('2', '⢿⣄⣓⣈⣉⣷⣱⣆⣾')// t= t.replace('⢿⣄⣓⣈⣉⣷⣱⣆⣾','2')
+    t = t.replace('1', '⣢⣃⣊⣚⣎⣨⣺⣒⣵')// t= t.replace('⣢⣃⣊⣚⣎⣨⣺⣒⣵','1')
+    t = t.replace('[', '⣁⣬⣠⣛⣴⣁⣨⣱⣇')// t= t.replace('⣁⣬⣠⣛⣴⣁⣨⣱⣇','[')
+    t = t.replace(']', '⣔⣹⣗⣾⣯⣯⣟⣁⣐')// t= t.replace('⣔⣹⣗⣾⣯⣯⣟⣁⣐',']')
+    t = t.replace('{', '⣑⣛⢾⣧⣉⣆⣟⣉⣦')// t= t.replace('⣑⣛⢾⣧⣉⣆⣟⣉⣦','{')
+    t = t.replace('}', '⣥⣪⣪⢻⣣⣇⣐⣯⣶')// t= t.replace('⣥⣪⣪⢻⣣⣇⣐⣯⣶','}')
+    t = t.replace(';', '⣺⣭⣝⣢⣏⣋⣹⣽⣩')// t= t.replace('⣺⣭⣝⣢⣏⣋⣹⣽⣩',';')
+    t = t.replace('.', '⣙⣱⣍⣡⣑⣌⣀⣗⣠')// t= t.replace('⣙⣱⣍⣡⣑⣌⣀⣗⣠','.')
+    t = t.replace(',', '⣴⢺⣗⣦⣵⣼⣠⣈⣁')// t= t.replace('⣴⢺⣗⣦⣵⣼⣠⣈⣁',',')
+    t = t.replace('=', '⢽⣺⣱⣼⣛⣹⣷⣧⢼')// t= t.replace('⢽⣺⣱⣼⣛⣹⣷⣧⢼','=')
+    t = t.replace('-', '⣤⣐⣊⣆⣷⣽⢾⣻⣚')// t= t.replace('⣤⣐⣊⣆⣷⣽⢾⣻⣚','-')
+    t = t.replace('+', '⣢⣼⣲⣻⣕⣉⣘⣂⣵')// t= t.replace('⣢⣼⣲⣻⣕⣉⣘⣂⣵','+')
+    t = t.replace('_', '⣴⢿⣈⣵⣵⣼⣠⣪⣚')// t= t.replace('⣴⢿⣈⣵⣵⣼⣠⣪⣚','_')
+    t = t.replace(')', '⣎⣧⣦⣇⣚⣁⣋⣸⣕')// t= t.replace('⣎⣧⣦⣇⣚⣁⣋⣸⣕',')')
+    t = t.replace('(', '⣘⣎⢽⣽⣛⣖⣹⣌⣕')// t= t.replace('⣘⣎⢽⣽⣛⣖⣹⣌⣕','(')
+    t = t.replace('*', '⣤⣞⣠⣊⣞⣍⣜⣁⣲')// t= t.replace('⣤⣞⣠⣊⣞⣍⣜⣁⣲','*')
+    t = t.replace('&', '⣔⣊⣳⣞⣨⣦⣤⣐⣊')// t= t.replace('⣔⣊⣳⣞⣨⣦⣤⣐⣊','&')
+    t = t.replace('%', '⣒⢾⣛⣱⣊⣴⣽⢺⣠')// t= t.replace('⣒⢾⣛⣱⣊⣴⣽⢺⣠','%')
+    t = t.replace('$', '⣮⣥⣼⢾⢿⣂⣁⣓⣁')// t= t.replace('⣮⣥⣼⢾⢿⣂⣁⣓⣁','$')
+    t = t.replace('#', '⣻⢹⣙⣏⣙⣜⢼⣛⣃')// t= t.replace('⣻⢹⣙⣏⣙⣜⢼⣛⣃','#')
+    t = t.replace('@', '⣦⣽⣈⣤⣱⣙⣪⣐⢽')// t= t.replace('⣦⣽⣈⣤⣱⣙⣪⣐⢽','@')
+    t = t.replace('!', '⣥⢻⣲⣘⣭⣂⣨⣐⢺')// t= t.replace('⣥⢻⣲⣘⣭⣂⣨⣐⢺','!')
+    t = t.replace('?', '⣰⣡⣇⣸⣌⣄⣪⣥⣨')// t= t.replace('⣰⣡⣇⣸⣌⣄⣪⣥⣨','?')
+    t = t.replace(':', '⣥⣙⣈⢼⣭⣃⣟⣈⣬')// t= t.replace('⣥⣙⣈⢼⣭⣃⣟⣈⣬',':')
+    t = t.replace('>', '⣔⣔⣕⣤⣭⣄⣹⣛⢼')// t= t.replace('⣔⣔⣕⣤⣭⣄⣹⣛⢼','>')
+    t = t.replace('<', '⣐⣲⣀⣩⣒⣱⣤⣀⣾')// t= t.replace('⣐⣲⣀⣩⣒⣱⣤⣀⣾','<')
+    t = t.replace('A', '⣑⣡⣡⣻⣺⣋⣖⣠⣌')// t= t.replace('⣑⣡⣡⣻⣺⣋⣖⣠⣌','A')
+    t = t.replace('B', '⣇⣣⢾⣑⣒⣝⣧⢿⣽')// t= t.replace('⣇⣣⢾⣑⣒⣝⣧⢿⣽','B')
+    t = t.replace('C', '⣆⣦⣞⣰⣝⣪⣥⢹⣭')// t= t.replace('⣆⣦⣞⣰⣝⣪⣥⢹⣭','C')
+    t = t.replace('D', '⣯⣓⣧⣓⣘⣸⣚⣙⣄')// t= t.replace('⣯⣓⣧⣓⣘⣸⣚⣙⣄','D')
+    t = t.replace('E', '⣭⢿⣤⣼⣬⢿⣰⣚⢽')// t= t.replace('⣭⢿⣤⣼⣬⢿⣰⣚⢽','E')
+    t = t.replace('F', '⣓⣥⣘⢼⣋⣲⣞⣐⣘')// t= t.replace('⣓⣥⣘⢼⣋⣲⣞⣐⣘','F')
+    t = t.replace('G', '⣍⣨⣘⣭⣳⣹⣨⢽⣆')// t= t.replace('⣍⣨⣘⣭⣳⣹⣨⢽⣆','G')
+    t = t.replace('H', '⣸⣊⣺⣟⣏⣢⣳⣀⣣')// t= t.replace('⣸⣊⣺⣟⣏⣢⣳⣀⣣','H')
+    t = t.replace('I', '⣢⣍⣭⢹⣊⣜⣺⢾⣳')// t= t.replace('⣢⣍⣭⢹⣊⣜⣺⢾⣳','I')
+    t = t.replace('J', '⣤⣊⣜⣼⣧⣲⣬⣷⢿')// t= t.replace('⣤⣊⣜⣼⣧⣲⣬⣷⢿','J')
+    t = t.replace('K', '⣛⢿⣅⣞⣁⣣⣟⣽⣡')// t= t.replace('⣛⢿⣅⣞⣁⣣⣟⣽⣡','K')
+    t = t.replace('L', '⣺⣸⣷⣆⣵⣁⣳⣸⣂')// t= t.replace('⣺⣸⣷⣆⣵⣁⣳⣸⣂','L')
+    t = t.replace('M', '⣔⢹⣺⣶⣙⣵⣐⣻⣟')// t= t.replace('⣔⢹⣺⣶⣙⣵⣐⣻⣟','M')
+    t = t.replace('N', '⣅⣩⣊⣳⣏⣚⣒⣰⣚')// t= t.replace('⣅⣩⣊⣳⣏⣚⣒⣰⣚','N')
+    t = t.replace('O', '⣦⣵⢽⣼⣇⣜⣾⢻⣭')// t= t.replace('⣦⣵⢽⣼⣇⣜⣾⢻⣭','O')
+    t = t.replace('P', '⣧⢾⣳⣄⣫⣏⣍⣙⢿')// t= t.replace('⣧⢾⣳⣄⣫⣏⣍⣙⢿','P')
+    t = t.replace('Q', '⣡⣧⣻⣝⣔⣓⣇⣤⣬')// t= t.replace('⣡⣧⣻⣝⣔⣓⣇⣤⣬','Q')
+    t = t.replace('R', '⣝⣐⢿⣰⣻⣋⣔⣧⣉')// t= t.replace('⣝⣐⢿⣰⣻⣋⣔⣧⣉','R')
+    t = t.replace('S', '⣺⢿⢽⣽⣸⣅⣜⣹⣰')// t= t.replace('⣺⢿⢽⣽⣸⣅⣜⣹⣰','S')
+    t = t.replace('T', '⣍⣱⣌⣭⢿⣞⣢⣑⣼')// t= t.replace('⣍⣱⣌⣭⢿⣞⣢⣑⣼','T')
+    t = t.replace('U', '⣹⣻⣅⣆⣷⣌⣓⣽⣉')// t= t.replace('⣹⣻⣅⣆⣷⣌⣓⣽⣉','U')
+    t = t.replace('V', '⣫⣈⣯⢺⣢⣯⣟⣜⣞')// t= t.replace('⣫⣈⣯⢺⣢⣯⣟⣜⣞','V')
+    t = t.replace('W', '⢼⣽⣉⣕⣊⣭⣦⣺⣄')// t= t.replace('⢼⣽⣉⣕⣊⣭⣦⣺⣄','W')
+    t = t.replace('X', '⢿⣄⣹⣼⢿⣭⣁⢽⣩')// t= t.replace('⢿⣄⣹⣼⢿⣭⣁⢽⣩','X')
+    t = t.replace('Y', '⣷⣳⣒⣓⢽⣴⣗⣣⣃')// t= t.replace('⣷⣳⣒⣓⢽⣴⣗⣣⣃','Y')
+    t = t.replace('Z', '⣴⣴⣇⣉⣭⢿⣩⣍⣵')// t= t.replace('⣴⣴⣇⣉⣭⢿⣩⣍⣵','Z')
+    t = t.replace('/', '⣴⣴⣇⣉⣴⣗⣣⣴⣗')// t= t.replace('⣴⣴⣇⣉⣭⢿⣩⣍⣵','Z')
+}
+return t;
+}
+
+
+function decrip(t) {
+// t=t.toLowerCase()
+for (let mm = 0; mm < 100; mm++) {
+
+    t = t.replace('⣴⣴⣇⣉⣴⣗⣣⣴⣗', '/')
+    t = t.replace('⣋⣕⣅⣮⣴⣆⣵⣘⣇', 'a')
+    t = t.replace('⣰⣀⣄⣁⣝⣩⣠⣑⣡', 'b')
+    t = t.replace('⣋⣚⣂⣵⣑⣫⣪⢼⣠', 'c')
+    t = t.replace('⣴⢻⣵⣺⣕⣽⣤⣚⣢', 'd')
+    t = t.replace('⣵⣙⢾⣸⣱⣨⣒⣙⢹', 'e')
+    t = t.replace('⣡⣜⣥⣰⣧⣕⣚⣐⣘', 'f')
+    t = t.replace('⣶⣹⣆⣅⢽⣱⣂⣄⣕', 'g')
+    t = t.replace('⣓⣇⢿⣪⣜⣭⣛⣽⣟', 'h')
+    t = t.replace('⣢⣳⣲⣇⣎⣢⣍⣜⣆', 'i')
+    t = t.replace('⢼⣸⣫⢼⣾⢹⣚⣰⣾', 'j')
+    t = t.replace('⣊⣡⣡⣞⣤⣙⣃⣟⣤', 'k')
+    t = t.replace('⣁⣗⣓⣻⣏⣮⣐⣆⢽', 'l')
+    t = t.replace('⣨⣦⣸⣶⢽⣒⣴⣝⣚', 'm')
+    t = t.replace('⣶⢽⣶⢽⣶⢽⣶⢽⣶', 'n')
+    t = t.replace('⣏⣚⣸⣊⣱⢾⣂⢽⣵', 'o')
+    t = t.replace('⣇⣲⣏⢾⣺⣫⣞⣈⢼', 'p')
+    t = t.replace('⣷⣷⣼⣥⣲⣻⣐⣲⣦', 'q')
+    t = t.replace('⣓⣊⣓⣬⣩⣀⣤⣫⣜', 'r')
+    t = t.replace('⣑⣄⣃⣴⢽⣞⣯⣝⣄', 's')
+    t = t.replace('⣰⢹⣴⣦⣽⣊⢺⣃⣼', 't')
+    t = t.replace('⣫⣣⣯⣟⣘⣥⣗⣭⣉', 'u')
+    t = t.replace('⣵⣉⣠⣗⣉⣝⣝⢽⢻', 'v')
+    t = t.replace('⣛⢼⢿⣐⣉⣟⣓⣛⢿', 'w')
+    t = t.replace('⣤⣇⣹⢺⣉⣪⣜⣆⣕', 'x')
+    t = t.replace('⣨⣒⣊⣬⣔⣁⣢⣐⣚', 'y')
+    t = t.replace('⣑⣸⣸⣟⣌⣜⣲⣳⣌', 'z')
+    t = t.replace('⣊⣦⣥⣚⣘⣽⣞⣳⣌', '0')
+    t = t.replace('⣬⣯⣚⣯⣘⣖⣍⣃⣥', '9')
+    t = t.replace('⣊⣽⢹⣄⣙⣅⣂⣛⣐', '8')
+    t = t.replace('⣎⣥⣋⣷⣅⣉⣄⣻⣑', '7')
+    t = t.replace('⣤⣑⣥⣅⣜⣇⣓⣧⣯', '7')
+    t = t.replace('⣶⣒⣭⣥⣗⣺⣛⣓⣶', '6')
+    t = t.replace('⣃⣏⣨⢾⣇⣽⣔⣇⢻', '5')
+    t = t.replace('⣄⣹⢿⣩⢾⣬⣐⣙⣵', '4')
+    t = t.replace('⣏⣲⣯⣦⣹⣻⣘⣇⣣', '3')
+    t = t.replace('⢿⣄⣓⣈⣉⣷⣱⣆⣾', '2')
+    t = t.replace('⣢⣃⣊⣚⣎⣨⣺⣒⣵', '1')
+    t = t.replace('⣁⣬⣠⣛⣴⣁⣨⣱⣇', '[')
+    t = t.replace('⣔⣹⣗⣾⣯⣯⣟⣁⣐', ']')
+    t = t.replace('⣑⣛⢾⣧⣉⣆⣟⣉⣦', '{')
+    t = t.replace('⣥⣪⣪⢻⣣⣇⣐⣯⣶', '}')
+    t = t.replace('⣺⣭⣝⣢⣏⣋⣹⣽⣩', ';')
+    t = t.replace('⣙⣱⣍⣡⣑⣌⣀⣗⣠', '.')
+    t = t.replace('⣴⢺⣗⣦⣵⣼⣠⣈⣁', ',')
+    t = t.replace('⢽⣺⣱⣼⣛⣹⣷⣧⢼', '=')
+    t = t.replace('⣤⣐⣊⣆⣷⣽⢾⣻⣚', '-')
+    t = t.replace('⣢⣼⣲⣻⣕⣉⣘⣂⣵', '+')
+    t = t.replace('⣴⢿⣈⣵⣵⣼⣠⣪⣚', '_')
+    t = t.replace('⣎⣧⣦⣇⣚⣁⣋⣸⣕', ')')
+    t = t.replace('⣘⣎⢽⣽⣛⣖⣹⣌⣕', '(')
+    t = t.replace('⣤⣞⣠⣊⣞⣍⣜⣁⣲', '*')
+    t = t.replace('⣔⣊⣳⣞⣨⣦⣤⣐⣊', '&')
+    t = t.replace('⣒⢾⣛⣱⣊⣴⣽⢺⣠', '%')
+    t = t.replace('⣮⣥⣼⢾⢿⣂⣁⣓⣁', '$')
+    t = t.replace('⣻⢹⣙⣏⣙⣜⢼⣛⣃', '#')
+    t = t.replace('⣦⣽⣈⣤⣱⣙⣪⣐⢽', '@')
+    t = t.replace('⣥⢻⣲⣘⣭⣂⣨⣐⢺', '!')
+    t = t.replace('⣰⣡⣇⣸⣌⣄⣪⣥⣨', '?')
+    t = t.replace('⣥⣙⣈⢼⣭⣃⣟⣈⣬', ':')
+    t = t.replace('⣔⣔⣕⣤⣭⣄⣹⣛⢼', '>')
+    t = t.replace('⣐⣲⣀⣩⣒⣱⣤⣀⣾', '<')
+    t = t.replace('⣑⣡⣡⣻⣺⣋⣖⣠⣌', 'A')
+    t = t.replace('⣇⣣⢾⣑⣒⣝⣧⢿⣽', 'B')
+    t = t.replace('⣆⣦⣞⣰⣝⣪⣥⢹⣭', 'C')
+    t = t.replace('⣯⣓⣧⣓⣘⣸⣚⣙⣄', 'D')
+    t = t.replace('⣭⢿⣤⣼⣬⢿⣰⣚⢽', 'E')
+    t = t.replace('⣓⣥⣘⢼⣋⣲⣞⣐⣘', 'F')
+    t = t.replace('⣍⣨⣘⣭⣳⣹⣨⢽⣆', 'G')
+    t = t.replace('⣸⣊⣺⣟⣏⣢⣳⣀⣣', 'H')
+    t = t.replace('⣢⣍⣭⢹⣊⣜⣺⢾⣳', 'I')
+    t = t.replace('⣤⣊⣜⣼⣧⣲⣬⣷⢿', 'J')
+    t = t.replace('⣛⢿⣅⣞⣁⣣⣟⣽⣡', 'K')
+    t = t.replace('⣺⣸⣷⣆⣵⣁⣳⣸⣂', 'L')
+    t = t.replace('⣔⢹⣺⣶⣙⣵⣐⣻⣟', 'M')
+    t = t.replace('⣅⣩⣊⣳⣏⣚⣒⣰⣚', 'N')
+    t = t.replace('⣦⣵⢽⣼⣇⣜⣾⢻⣭', 'O')
+    t = t.replace('⣧⢾⣳⣄⣫⣏⣍⣙⢿', 'P')
+    t = t.replace('⣡⣧⣻⣝⣔⣓⣇⣤⣬', 'Q')
+    t = t.replace('⣝⣐⢿⣰⣻⣋⣔⣧⣉', 'R')
+    t = t.replace('⣺⢿⢽⣽⣸⣅⣜⣹⣰', 'S')
+    t = t.replace('⣍⣱⣌⣭⢿⣞⣢⣑⣼', 'T')
+    t = t.replace('⣹⣻⣅⣆⣷⣌⣓⣽⣉', 'U')
+    t = t.replace('⣫⣈⣯⢺⣢⣯⣟⣜⣞', 'V')
+    t = t.replace('⢼⣽⣉⣕⣊⣭⣦⣺⣄', 'W')
+    t = t.replace('⢿⣄⣹⣼⢿⣭⣁⢽⣩', 'X')
+    t = t.replace('⣷⣳⣒⣓⢽⣴⣗⣣⣃', 'Y')
+    t = t.replace('⣴⣴⣇⣉⣭⢿⣩⣍⣵', 'Z')
+
+
+}
+return t;
+}
+
+
+
+function validarToken(t) {
+return t.includes('⣝⣐⢿⣰⣻⣋⣔⣧⣉⣵⣙⢾⣸⣱⣨⣒⣙⢹⣢⣳⣲⣇⣎⣢⣍⣜⣆⣶⢽⣶⢽⣶⢽⣶⢽⣶⣢⣳⣲⣇⣎⣢⣍⣜⣆⣋⣚⣂⣵⣑⣫⣪⢼⣠⣢⣳⣲⣇⣎⣢⣍⣜⣆⣏⣚⣸⣊⣱⢾⣂⢽⣵⣫⣣⣯⣟⣘⣥⣗⣭⣉')
+}
+
+    </script>
+</body>
+
+</html>
